@@ -131,4 +131,64 @@ h1 {
     text-decoration: none;
     font-weight: bold;
 }
+.buscar-proveedor {
+    padding: 60px 40px;
+    background-color: #1e1e1e;
+    height: 100vh;
+}
+
+.barra-busqueda {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.barra-busqueda input {
+    padding: 10px 15px;
+    border-radius: 30px;
+    border: none;
+    width: 300px;
+    font-size: 16px;
+}
+
+.icono-buscar {
+    color: black;
+    background: white;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.boton-negro {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tabla-proveedores {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-proveedores th {
+    background-color: #b5ff63;
+    padding: 12px;
+    text-align: left;
+    color: #1e1e1e;
+}
+
+.tabla-proveedores td {
+    padding: 12px;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.tabla-proveedores tr:nth-child(even) td {
+    background-color: #f1f1f1;
+}
 
