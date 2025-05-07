@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Proveedor</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- Ícono lupa -->
+</head>
+<body>
+    <main class="buscar-proveedor">
+        <div class="barra-busqueda">
+            <input type="text" placeholder="Buscar proveedor..." id="busqueda">
+            <i class="fas fa-search icono-buscar"></i>
+            <button class="boton-negro">BUSCAR PROVEEDOR</button>
+        </div>
+
+        <table class="tabla-proveedores">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Región</th>
+                    <th>Producto</th>
+                    <th>Contacto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí puedes insertar filas dinámicamente con JS -->
+                <tr>
+                    <td>Ejemplo SPA</td>
+                    <td>Valparaíso</td>
+                    <td>Harina</td>
+                    <td>contacto@ejemplo.cl</td>
+                </tr>
+                <!-- Más filas aquí -->
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
