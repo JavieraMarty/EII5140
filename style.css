@@ -188,6 +188,31 @@ h1 {
     color: #000000;
 }
 
+.contenedor-informe {
+  padding: 40px;
+  background-color: #1e1e1e;
+  min-height: 100vh;
+}
+
+.contenedor-informe h1 {
+  color: white;
+  margin-bottom: 30px;
+}
+
+.graficos {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.grafico-izquierda,
+.grafico-derecha {
+  flex: 1;
+  min-width: 400px;
+}
+
+
 .tabla-proveedores tr:nth-child(even) td {
     background-color: #f1f1f1;
 }
