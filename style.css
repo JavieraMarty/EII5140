@@ -78,3 +78,57 @@ h1 {
     background-color: #b5ff63;
     clip-path: polygon(0 0, 100% 0, 0 100%);
 }
+
+.marca {
+    background-color: #b5ff63;
+    padding: 5px 15px;
+    border-radius: 20px;
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-weight: bold;
+    color: #1e1e1e;
+}
+
+.menu-central {
+    margin-top: 100px;
+    text-align: center;
+}
+
+.menu-central h2 {
+    color: white;
+    margin-bottom: 40px;
+}
+
+.opciones {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.opcion {
+    background-color: #b5ff63;
+    padding: 10px;
+    border-radius: 10px;
+    width: 200px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    text-align: center;
+}
+
+.opcion img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.boton-opcion {
+    display: inline-block;
+    background-color: #12101d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
