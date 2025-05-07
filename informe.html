@@ -1,74 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Informe Proveedor</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <title>Informe de Proveedor</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="contenedor-informe">
-    <h1>Nombre de proveedor</h1>
+    <main class="contenedor-informe">
+        <h1>Nombre de proveedor</h1>
 
-    <div class="graficos">
-      <div class="grafico-izquierda">
-        <canvas id="barChart"></canvas>
-        <p style="color: white; text-align: center;">Año 1</p>
-        <canvas id="gaugeChart" width="200" height="100"></canvas>
-      </div>
-
-      <div class="grafico-derecha">
-        <canvas id="areaChart"></canvas>
-      </div>
-    </div>
-  </main>
-
-  <script>
-    // Gráfico de barras horizontales
-    new Chart(document.getElementById('barChart'), {
-      type: 'bar',
-      data: {
-        labels: ['Elemento 1', 'Elemento 2', 'Elemento 3', 'Elemento 4', 'Elemento 5', 'Elemento 6', 'Elemento 7', 'Elemento 8', 'Elemento 9', 'Elemento 10'],
-        datasets: [{
-          label: 'Grupo 1',
-          data: [13451, 11329, 10463, 10328, 8892, 6236, 6045, 5567, 5094, 5058],
-          backgroundColor: '#b5ff63'
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        plugins: {
-          legend: { display: false }
-        },
-        scales: {
-          x: { ticks: { color: '#fff' }, grid: { color: '#333' } },
-          y: { ticks: { color: '#fff' }, grid: { color: '#333' } }
-        }
-      }
-    });
-
-    // Gráfico de área
-    new Chart(document.getElementById('areaChart'), {
-      type: 'line',
-      data: {
-        labels: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'],
-        datasets: [{
-          label: 'Grupo A',
-          data: [20, 45, 80, 70, 120],
-          backgroundColor: '#b5ff63',
-          borderColor: '#b5ff63',
-          fill: true,
-          tension: 0.4
-        }, {
-          label: 'Grupo B',
-          data: [10, 15, 40, 35, 50],
-          backgroundColor: '#121212',
-          borderColor: '#121212',
-          fill: true,
-          tension: 0.4
-        }]
-      },
-      options: {
-        plugins: { legend: { labels: { color: '#fff' } } },
-        scales: {
-          x: { ticks: { color: '#fff' },
+        <div class="bloques-informe">
+            <div class="bloques-izquierda">
+                <div class="bloque-verde">Proveedores</div>
+                <div class="bloque-verde">Materias</div>
+            </div>
+            <div class="bloque-recomendaciones">
+                Recomendaciones
+            </div>
+        </div>
+    </main>
+</body>
+</html>
