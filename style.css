@@ -1,0 +1,80 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #1e1e1e;
+    color: #b5ff63;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.menu-superior {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background-color: #b5ff63;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #1e1e1e;
+    display: flex;
+    gap: 10px;
+}
+
+.contenedor {
+    text-align: center;
+    z-index: 1;
+}
+
+.etiqueta {
+    background-color: #b5ff63;
+    color: #1e1e1e;
+    padding: 5px 20px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 60px;
+    margin: 10px 0 40px;
+    line-height: 1;
+}
+
+.input {
+    display: block;
+    width: 250px;
+    margin: 10px auto;
+    padding: 10px;
+    border: none;
+    border-radius: 30px;
+    background-color: #b5ff63;
+    color: #1e1e1e;
+    font-size: 16px;
+}
+
+.boton {
+    background-color: #12101d;
+    color: white;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 30px;
+    margin-top: 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.esquina {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background-color: #b5ff63;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+}
