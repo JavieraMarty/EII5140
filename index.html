@@ -26,5 +26,32 @@
     </main>
 
     <div class="esquina"></div>
+<script>
+  const usuariosValidos = [
+    { nombre: "213141473", contrasena: "4147" },
+    { nombre: "211830980", contrasena: "3098" },
+    { nombre: "210366792", contrasena: "6679" },
+    { nombre: "admin", contrasena: "admin" }
+  ];
+
+  function validarLogin() {
+    const usuarioInput = document.getElementById("usuario").value.toLowerCase();
+    const contrasenaInput = document.getElementById("contrasena").value;
+    const mensajeError = document.getElementById("error");
+
+    const usuarioValido = usuariosValidos.find(user =>
+      user.nombre === usuarioInput && user.contrasena === contrasenaInput
+    );
+
+    if (usuarioValido) {
+      mensajeError.textContent = "";
+      window.location.href = "home.html";
+    } else {
+      mensajeError.textContent = "Nombre o contraseña incorrectos.";
+    }
+  }
+</script>
+
+    
 </body>
 </html>
