@@ -1,38 +1,85 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Buscar Materia Prima</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <title>Buscar Materia Prima</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-    <main class="buscar-proveedor">
-        <div class="barra-busqueda">
-            <input type="text" placeholder="Buscar materia prima..." id="busqueda-materia">
-            <i class="fas fa-search icono-buscar"></i>
-            <button class="boton-negro">BUSCAR MATERIA PRIMA</button>
-        </div>
+  <main class="buscar-proveedor">
+    <!-- Cargar archivo Excel -->
+    <input type="file" id="excelFile" accept=".xlsx" style="margin-bottom: 10px;" />
 
-        <table class="tabla-proveedores">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Stock</th>
-                    <th>Proveedor</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Azúcar refinada</td>
-                    <td>Endulzante</td>
-                    <td>3.000 kg</td>
-                    <td>Alimentos del Sur</td>
-                </tr>
-                <!-- Agrega más filas si deseas -->
-            </tbody>
-        </table>
-    </main>
+    <!-- Barra de búsqueda -->
+    <div class="barra-busqueda">
+      <input type="text" placeholder="Buscar materia prima..." id="busqueda">
+      <i class="fas fa-search icono-buscar"></i>
+      <button class="boton-negro" onclick="filtrarMateria()">BUSCAR MATERIA PRIMA</button>
+    </div>
+
+    <!-- Tabla con encabezados -->
+    <table id="tabla" class="tabla-proveedores">
+      <thead>
+        <tr>
+          <th>Materia Prima</th>
+          <th>Tipo de Alerta</th>
+          <th>Alerta / Reclamo</th>
+          <th>Agente</th>
+          <th>Empresa Notificada</th>
+          <th>Origen</th>
+          <th>País Notificador</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-body">
+        <!-- Contenido dinámico -->
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    let materias = [];
+
+    document.getElementById('excelFile').addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const hoja = workbook.Sheets[workbook.SheetNames[0]];
+        materias = XLSX.utils.sheet_to_json(hoja);
+        mostrarMaterias(materias);
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
+
+    function mostrarMaterias(lista) {
+      const tbody = document.getElementById('tabla-body');
+      tbody.innerHTML = "";
+      lista.forEach(m => {
+        const fila = `<tr>
+          <td>${m["MATERIA PRIMA"] || ""}</td>
+          <td>${m["TIPO DE ALERTA"] || ""}</td>
+          <td>${m["ALERTA / RECLAMO"] || ""}</td>
+          <td>${m["AGENTE"] || ""}</td>
+          <td>${m["EMPRESA NOTIFICADA"] || ""}</td>
+          <td>${m["ORIGEN"] || ""}</td>
+          <td>${m["PAÍS QUE NOTIFICA"] || ""}</td>
+        </tr>`;
+        tbody.innerHTML += fila;
+      });
+    }
+
+    function filtrarMateria() {
+      const texto = document.getElementById('busqueda').value.toLowerCase();
+      const filtradas = materias.filter(m =>
+        m["MATERIA PRIMA"] && m["MATERIA PRIMA"].toLowerCase().includes(texto)
+      );
+      mostrarMaterias(filtradas);
+    }
+  </script>
 </body>
 </html>
