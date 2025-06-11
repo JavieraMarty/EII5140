@@ -5,6 +5,7 @@
     <title>Buscar Proveedor</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- Ícono lupa -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
     <main class="buscar-proveedor">
@@ -13,27 +14,67 @@
             <i class="fas fa-search icono-buscar"></i>
             <button class="boton-negro">BUSCAR PROVEEDOR</button>
         </div>
+        <!-- Botón para cargar Excel -->
+        <input type="file" id="excelFile" accept=".xlsx" />
+        
+        <!-- Input de búsqueda ya existente -->
+        <input type="text" placeholder="Buscar proveedor..." id="busqueda" oninput="filtrarProveedor()">
 
-        <table class="tabla-proveedores">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Región</th>
-                    <th>Producto</th>
-                    <th>Contacto</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Aquí puedes insertar filas dinámicamente con JS -->
-                <tr>
-                    <td>Ejemplo SPA</td>
-                    <td>Valparaíso</td>
-                    <td>Harina</td>
-                    <td>contacto@ejemplo.cl</td>
-                </tr>
-                <!-- Más filas aquí -->
+        <table id="tabla" class="tabla-proveedores">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Región</th>
+              <th>Producto</th>
+              <th>Contacto</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-body">
+          </tbody>
+        </table>
+
             </tbody>
         </table>
     </main>
+    <script>
+  let proveedores = [];
+
+  document.getElementById('excelFile').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const hoja = workbook.Sheets[workbook.SheetNames[0]];
+      proveedores = XLSX.utils.sheet_to_json(hoja);
+      mostrarProveedores(proveedores); // Mostrar todos por defecto
+    };
+
+    reader.readAsArrayBuffer(file);
+  });
+
+  function mostrarProveedores(lista) {
+    const tbody = document.getElementById('tabla-body');
+    tbody.innerHTML = "";
+    lista.forEach(p => {
+      const fila = `<tr>
+        <td>${p.Nombre}</td>
+        <td>${p.Región}</td>
+        <td>${p.Producto}</td>
+        <td>${p.Contacto}</td>
+      </tr>`;
+      tbody.innerHTML += fila;
+    });
+  }
+
+  function filtrarProveedor() {
+    const texto = document.getElementById('busqueda').value.toLowerCase();
+    const filtrados = proveedores.filter(p => p.Nombre.toLowerCase().includes(texto));
+    mostrarProveedores(filtrados);
+  }
+</script>
+
+    
 </body>
 </html>
