@@ -19,7 +19,7 @@
       <button class="boton-negro" onclick="filtrarMateria()">BUSCAR MATERIA PRIMA</button>
     </div>
 
-    <!-- Tabla con encabezados -->
+    <!-- Tabla -->
     <table id="tabla" class="tabla-proveedores">
       <thead>
         <tr>
@@ -36,10 +36,16 @@
         <!-- Contenido dinámico -->
       </tbody>
     </table>
+
+    <!-- Controles de paginación -->
+    <div id="paginacion" class="paginacion" style="margin-top: 20px;"></div>
   </main>
 
   <script>
     let materias = [];
+    let materiasFiltradas = [];
+    let paginaActual = 1;
+    const filasPorPagina = 10;
 
     document.getElementById('excelFile').addEventListener('change', (event) => {
       const file = event.target.files[0];
@@ -50,34 +56,62 @@
         const workbook = XLSX.read(data, { type: 'array' });
         const hoja = workbook.Sheets[workbook.SheetNames[0]];
         materias = XLSX.utils.sheet_to_json(hoja);
-        mostrarMaterias(materias);
+        materiasFiltradas = [...materias];
+        paginaActual = 1;
+        mostrarMaterias(materiasFiltradas);
       };
 
       reader.readAsArrayBuffer(file);
     });
 
     function mostrarMaterias(lista) {
-  const tbody = document.getElementById('tabla-body');
-  const filas = lista.map(m => `
-    <tr>
-      <td>${m["MATERIA PRIMA"] || ""}</td>
-      <td>${m["TIPO DE ALERTA"] || ""}</td>
-      <td>${m["ALERTA / RECLAMO"] || ""}</td>
-      <td>${m["AGENTE"] || ""}</td>
-      <td>${m["EMPRESA NOTIFICADA"] || ""}</td>
-      <td>${m["ORIGEN"] || ""}</td>
-      <td>${m["PAÍS QUE NOTIFICA"] || ""}</td>
-    </tr>
-  `).join("");
-  tbody.innerHTML = filas;
-}
+      const tbody = document.getElementById('tabla-body');
+      tbody.innerHTML = "";
+
+      const inicio = (paginaActual - 1) * filasPorPagina;
+      const fin = inicio + filasPorPagina;
+      const paginaDatos = lista.slice(inicio, fin);
+
+      paginaDatos.forEach(m => {
+        const fila = `<tr>
+          <td>${m["MATERIA PRIMA"] || ""}</td>
+          <td>${m["TIPO DE ALERTA"] || ""}</td>
+          <td>${m["ALERTA / RECLAMO"] || ""}</td>
+          <td>${m["AGENTE"] || ""}</td>
+          <td>${m["EMPRESA NOTIFICADA"] || ""}</td>
+          <td>${m["ORIGEN"] || ""}</td>
+          <td>${m["PAÍS QUE NOTIFICA"] || ""}</td>
+        </tr>`;
+        tbody.innerHTML += fila;
+      });
+
+      generarControlesPaginacion(lista.length);
+    }
+
+    function generarControlesPaginacion(totalItems) {
+      const pagDiv = document.getElementById('paginacion');
+      pagDiv.innerHTML = "";
+      const totalPaginas = Math.ceil(totalItems / filasPorPagina);
+
+      for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.className = (i === paginaActual) ? "activo" : "";
+        btn.onclick = () => {
+          paginaActual = i;
+          mostrarMaterias(materiasFiltradas);
+        };
+        pagDiv.appendChild(btn);
+      }
+    }
 
     function filtrarMateria() {
       const texto = document.getElementById('busqueda').value.toLowerCase();
-      const filtradas = materias.filter(m =>
+      materiasFiltradas = materias.filter(m =>
         m["MATERIA PRIMA"] && m["MATERIA PRIMA"].toLowerCase().includes(texto)
       );
-      mostrarMaterias(filtradas);
+      paginaActual = 1;
+      mostrarMaterias(materiasFiltradas);
     }
   </script>
 </body>
