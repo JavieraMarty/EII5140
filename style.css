@@ -257,4 +257,19 @@ h1 {
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     min-width: 400px;
 }
+.paginacion button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #b5ff63;
+  color: black;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.paginacion button.activo {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+}
 
