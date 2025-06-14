@@ -21,6 +21,7 @@
 
         <!-- Tabla de resultados -->
         <table id="tabla" class="tabla-proveedores">
+          <div id="paginacion" class="paginacion" style="margin-top: 20px;"></div>  
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -34,46 +35,77 @@
             </tbody>
         </table>
     </main>
-
-    <script>
-        let proveedores = [];
-
-        document.getElementById('excelFile').addEventListener('change', (event) => {
+        <script>
+          let proveedores = [];
+          let paginaActual = 1;
+          const filasPorPagina = 10;
+        
+          // Cargar archivo Excel
+          document.getElementById('excelFile').addEventListener('change', (event) => {
             const file = event.target.files[0];
             const reader = new FileReader();
-
+        
             reader.onload = (e) => {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const hoja = workbook.Sheets[workbook.SheetNames[0]];
-                proveedores = XLSX.utils.sheet_to_json(hoja);
-                mostrarProveedores(proveedores); // Mostrar todos al cargar
+              const data = new Uint8Array(e.target.result);
+              const workbook = XLSX.read(data, { type: 'array' });
+              const hoja = workbook.Sheets[workbook.SheetNames[0]];
+              proveedores = XLSX.utils.sheet_to_json(hoja);
+              paginaActual = 1;
+              mostrarProveedores(proveedores);
             };
-
+        
             reader.readAsArrayBuffer(file);
-        });
-
-        function mostrarProveedores(lista) {
+          });
+        
+          function mostrarProveedores(lista) {
             const tbody = document.getElementById('tabla-body');
             tbody.innerHTML = "";
-            lista.forEach(p => {
-                const fila = `<tr>
-                    <td>${p.Nombre || ""}</td>
-                    <td>${p.Región || ""}</td>
-                    <td>${p.Producto || ""}</td>
-                    <td>${p.Contacto || ""}</td>
-                </tr>`;
-                tbody.innerHTML += fila;
+        
+            const inicio = (paginaActual - 1) * filasPorPagina;
+            const fin = inicio + filasPorPagina;
+            const paginaDatos = lista.slice(inicio, fin);
+        
+            paginaDatos.forEach(p => {
+              const fila = `<tr>
+                <td>${p.Nombre || ""}</td>
+                <td>${p.Región || ""}</td>
+                <td>${p.Producto || ""}</td>
+                <td>${p.Contacto || ""}</td>
+              </tr>`;
+              tbody.innerHTML += fila;
             });
-        }
-
-        function filtrarProveedor() {
+        
+            generarControlesPaginacion(lista.length);
+          }
+        
+          function generarControlesPaginacion(totalItems) {
+            const pagDiv = document.getElementById('paginacion');
+            pagDiv.innerHTML = "";
+            const totalPaginas = Math.ceil(totalItems / filasPorPagina);
+        
+            for (let i = 1; i <= totalPaginas; i++) {
+              const btn = document.createElement("button");
+              btn.textContent = i;
+              btn.className = (i === paginaActual) ? "activo" : "";
+              btn.onclick = () => {
+                paginaActual = i;
+                mostrarProveedores(proveedoresFiltrados);
+              };
+              pagDiv.appendChild(btn);
+            }
+          }
+        
+          let proveedoresFiltrados = [];
+        
+          function filtrarProveedor() {
             const texto = document.getElementById('busqueda').value.toLowerCase();
-            const filtrados = proveedores.filter(p =>
-                p.Nombre && p.Nombre.toLowerCase().includes(texto)
+            proveedoresFiltrados = proveedores.filter(p =>
+              p.Nombre && p.Nombre.toLowerCase().includes(texto)
             );
-            mostrarProveedores(filtrados);
-        }
-    </script>
-</body>
+            paginaActual = 1;
+            mostrarProveedores(proveedoresFiltrados);
+          }
+        </script>
+
+    </body>
 </html>
