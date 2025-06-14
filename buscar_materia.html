@@ -9,31 +9,6 @@
 </head>
 <body>
   <main class="buscar-proveedor">
-    <!-- Cargar archivo Excel -->
-    <script>
-      window.addEventListener("DOMContentLoaded", () => {
-        fetchExcelDesdeGitHub("https://github.com/JavieraMarty/EII5140/raw/e8f3b51a679373fce366efa08b92d8cd9303b43c/data/materias.xlsx");
-      });
-    
-      function fetchExcelDesdeGitHub(url) {
-        fetch(url)
-          .then(res => res.arrayBuffer())
-          .then(data => {
-            const workbook = XLSX.read(data, { type: 'array' });
-            const hoja = workbook.Sheets[workbook.SheetNames[0]];
-            materias = XLSX.utils.sheet_to_json(hoja);
-            materiasFiltradas = [...materias];
-            paginaActual = 1;
-            mostrarMaterias(materiasFiltradas);
-          })
-          .catch(err => {
-            console.error("Error al cargar Excel:", err);
-            alert("No se pudo cargar el archivo desde GitHub.");
-          });
-      }
-    </script>
-
-
     <!-- Barra de búsqueda -->
     <div class="barra-busqueda">
       <input type="text" placeholder="Buscar materia prima..." id="busqueda">
@@ -54,9 +29,7 @@
           <th>País Notificador</th>
         </tr>
       </thead>
-      <tbody id="tabla-body">
-        <!-- Contenido dinámico -->
-      </tbody>
+      <tbody id="tabla-body"></tbody>
     </table>
 
     <!-- Controles de paginación -->
@@ -69,22 +42,26 @@
     let paginaActual = 1;
     const filasPorPagina = 10;
 
-    document.getElementById('excelFile').addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const hoja = workbook.Sheets[workbook.SheetNames[0]];
-        materias = XLSX.utils.sheet_to_json(hoja);
-        materiasFiltradas = [...materias];
-        paginaActual = 1;
-        mostrarMaterias(materiasFiltradas);
-      };
-
-      reader.readAsArrayBuffer(file);
+    window.addEventListener("DOMContentLoaded", () => {
+      fetchExcelDesdeGitHub("https://raw.githubusercontent.com/JavieraMarty/EII5140/main/data/materias.xlsx");
     });
+
+    function fetchExcelDesdeGitHub(url) {
+      fetch(url)
+        .then(res => res.arrayBuffer())
+        .then(data => {
+          const workbook = XLSX.read(data, { type: 'array' });
+          const hoja = workbook.Sheets[workbook.SheetNames[0]];
+          materias = XLSX.utils.sheet_to_json(hoja);
+          materiasFiltradas = [...materias];
+          paginaActual = 1;
+          mostrarMaterias(materiasFiltradas);
+        })
+        .catch(err => {
+          console.error("Error al cargar Excel:", err);
+          alert("No se pudo cargar el archivo desde GitHub.");
+        });
+    }
 
     function mostrarMaterias(lista) {
       const tbody = document.getElementById('tabla-body');
