@@ -10,7 +10,29 @@
 <body>
   <main class="buscar-proveedor">
     <!-- Cargar archivo Excel -->
-    <input type="file" id="excelFile" accept=".xlsx" style="margin-bottom: 10px;" />
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        fetchExcelDesdeGitHub("https://github.com/JavieraMarty/EII5140/raw/e8f3b51a679373fce366efa08b92d8cd9303b43c/data/materias.xlsx");
+      });
+    
+      function fetchExcelDesdeGitHub(url) {
+        fetch(url)
+          .then(res => res.arrayBuffer())
+          .then(data => {
+            const workbook = XLSX.read(data, { type: 'array' });
+            const hoja = workbook.Sheets[workbook.SheetNames[0]];
+            materias = XLSX.utils.sheet_to_json(hoja);
+            materiasFiltradas = [...materias];
+            paginaActual = 1;
+            mostrarMaterias(materiasFiltradas);
+          })
+          .catch(err => {
+            console.error("Error al cargar Excel:", err);
+            alert("No se pudo cargar el archivo desde GitHub.");
+          });
+      }
+    </script>
+
 
     <!-- Barra de búsqueda -->
     <div class="barra-busqueda">
