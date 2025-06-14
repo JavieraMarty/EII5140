@@ -57,21 +57,20 @@
     });
 
     function mostrarMaterias(lista) {
-      const tbody = document.getElementById('tabla-body');
-      tbody.innerHTML = "";
-      lista.forEach(m => {
-        const fila = `<tr>
-          <td>${m["MATERIA PRIMA"] || ""}</td>
-          <td>${m["TIPO DE ALERTA"] || ""}</td>
-          <td>${m["ALERTA / RECLAMO"] || ""}</td>
-          <td>${m["AGENTE"] || ""}</td>
-          <td>${m["EMPRESA NOTIFICADA"] || ""}</td>
-          <td>${m["ORIGEN"] || ""}</td>
-          <td>${m["PAÍS QUE NOTIFICA"] || ""}</td>
-        </tr>`;
-        tbody.innerHTML += fila;
-      });
-    }
+  const tbody = document.getElementById('tabla-body');
+  const filas = lista.map(m => `
+    <tr>
+      <td>${m["MATERIA PRIMA"] || ""}</td>
+      <td>${m["TIPO DE ALERTA"] || ""}</td>
+      <td>${m["ALERTA / RECLAMO"] || ""}</td>
+      <td>${m["AGENTE"] || ""}</td>
+      <td>${m["EMPRESA NOTIFICADA"] || ""}</td>
+      <td>${m["ORIGEN"] || ""}</td>
+      <td>${m["PAÍS QUE NOTIFICA"] || ""}</td>
+    </tr>
+  `).join("");
+  tbody.innerHTML = filas;
+}
 
     function filtrarMateria() {
       const texto = document.getElementById('busqueda').value.toLowerCase();
