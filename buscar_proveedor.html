@@ -1,132 +1,113 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Buscar Proveedor</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Buscar Proveedor</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-    <main class="buscar-proveedor">
-        <!-- Cargar archivo Excel -->
-        <script>
-          window.addEventListener("DOMContentLoaded", () => {
-            fetchExcelDesdeGitHub("https://github.com/JavieraMarty/EII5140/raw/0e916990023bb933c9699f7164330e387a7a29bb/data/proveedores.xlsx");
-          });
-        
-          function fetchExcelDesdeGitHub(url) {
-            fetch(url)
-              .then(res => res.arrayBuffer())
-              .then(data => {
-                const workbook = XLSX.read(data, { type: 'array' });
-                const hoja = workbook.Sheets[workbook.SheetNames[0]];
-                proveedores = XLSX.utils.sheet_to_json(hoja);
-                proveedoresFiltrados = [...proveedores];
-                paginaActual = 1;
-                mostrarProveedores(proveedoresFiltrados);
-              })
-              .catch(err => {
-                console.error("Error al cargar Excel:", err);
-                alert("No se pudo cargar el archivo desde GitHub.");
-              });
-          }
-</script>
+  <main class="buscar-proveedor">
+    <!-- Barra de búsqueda -->
+    <div class="barra-busqueda">
+      <input type="text" placeholder="Buscar proveedor..." id="busqueda">
+      <i class="fas fa-search icono-buscar"></i>
+      <button class="boton-negro" onclick="filtrarProveedor()">BUSCAR PROVEEDOR</button>
+    </div>
 
-        <!-- Barra de búsqueda -->
-        <div class="barra-busqueda">
-            <input type="text" placeholder="Buscar proveedor..." id="busqueda">
-            <i class="fas fa-search icono-buscar"></i>
-            <button class="boton-negro" onclick="filtrarProveedor()">BUSCAR PROVEEDOR</button>
-        </div>
+    <!-- Tabla de resultados -->
+    <table id="tabla" class="tabla-proveedores">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Región</th>
+          <th>Producto</th>
+          <th>Contacto</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-body">
+        <!-- Contenido dinámico -->
+      </tbody>
+    </table>
 
-        <!-- Tabla de resultados -->
-        <table id="tabla" class="tabla-proveedores"> 
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Región</th>
-                    <th>Producto</th>
-                    <th>Contacto</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-body">
-                <!-- Contenido dinámico -->
-            </tbody>
-        </table>
-        <div id="paginacion" class="paginacion" style="margin-top: 20px;"></div> 
-    </main>
-        <script>
-          let proveedores = [];
-          let paginaActual = 1;
-          const filasPorPagina = 10;
-        
-          // Cargar archivo Excel
-          document.getElementById('excelFile').addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-        
-            reader.onload = (e) => {
-              const data = new Uint8Array(e.target.result);
-              const workbook = XLSX.read(data, { type: 'array' });
-              const hoja = workbook.Sheets[workbook.SheetNames[0]];
-              proveedores = XLSX.utils.sheet_to_json(hoja);
-              paginaActual = 1;
-              mostrarProveedores(proveedores);
-            };
-        
-            reader.readAsArrayBuffer(file);
-          });
-        
-          function mostrarProveedores(lista) {
-            const tbody = document.getElementById('tabla-body');
-            tbody.innerHTML = "";
-        
-            const inicio = (paginaActual - 1) * filasPorPagina;
-            const fin = inicio + filasPorPagina;
-            const paginaDatos = lista.slice(inicio, fin);
-        
-            paginaDatos.forEach(p => {
-              const fila = `<tr>
-                <td>${p.Nombre || ""}</td>
-                <td>${p.Región || ""}</td>
-                <td>${p.Producto || ""}</td>
-                <td>${p.Contacto || ""}</td>
-              </tr>`;
-              tbody.innerHTML += fila;
-            });
-        
-            generarControlesPaginacion(lista.length);
-          }
-        
-          function generarControlesPaginacion(totalItems) {
-            const pagDiv = document.getElementById('paginacion');
-            pagDiv.innerHTML = "";
-            const totalPaginas = Math.ceil(totalItems / filasPorPagina);
-        
-            for (let i = 1; i <= totalPaginas; i++) {
-              const btn = document.createElement("button");
-              btn.textContent = i;
-              btn.className = (i === paginaActual) ? "activo" : "";
-              btn.onclick = () => {
-                paginaActual = i;
-                mostrarProveedores(proveedoresFiltrados);
-              };
-              pagDiv.appendChild(btn);
-            }
-          }
-        
-          let proveedoresFiltrados = [];
-        
-          function filtrarProveedor() {
-            const texto = document.getElementById('busqueda').value.toLowerCase();
-            proveedoresFiltrados = proveedores.filter(p =>
-              p.Nombre && p.Nombre.toLowerCase().includes(texto)
-            );
-            paginaActual = 1;
-            mostrarProveedores(proveedoresFiltrados);
-          }
-        </script>
+    <!-- Controles de paginación -->
+    <div id="paginacion" class="paginacion" style="margin-top: 20px;"></div>
+  </main>
 
-    </body>
+  <script>
+    let proveedores = [];
+    let proveedoresFiltrados = [];
+    let paginaActual = 1;
+    const filasPorPagina = 10;
+
+    window.addEventListener("DOMContentLoaded", () => {
+      fetchExcelDesdeGitHub("https://github.com/JavieraMarty/EII5140/raw/0e916990023bb933c9699f7164330e387a7a29bb/data/proveedores.xlsx");
+    });
+
+    function fetchExcelDesdeGitHub(url) {
+      fetch(url)
+        .then(res => res.arrayBuffer())
+        .then(data => {
+          const workbook = XLSX.read(data, { type: 'array' });
+          const hoja = workbook.Sheets[workbook.SheetNames[0]];
+          proveedores = XLSX.utils.sheet_to_json(hoja);
+          proveedoresFiltrados = [...proveedores];
+          paginaActual = 1;
+          mostrarProveedores(proveedoresFiltrados);
+        })
+        .catch(err => {
+          console.error("Error al cargar Excel:", err);
+          alert("No se pudo cargar el archivo desde GitHub.");
+        });
+    }
+
+    function mostrarProveedores(lista) {
+      const tbody = document.getElementById('tabla-body');
+      tbody.innerHTML = "";
+
+      const inicio = (paginaActual - 1) * filasPorPagina;
+      const fin = inicio + filasPorPagina;
+      const paginaDatos = lista.slice(inicio, fin);
+
+      paginaDatos.forEach(p => {
+        const fila = `<tr>
+          <td>${p.Nombre || ""}</td>
+          <td>${p.Región || ""}</td>
+          <td>${p.Producto || ""}</td>
+          <td>${p.Contacto || ""}</td>
+        </tr>`;
+        tbody.innerHTML += fila;
+      });
+
+      generarControlesPaginacion(lista.length);
+    }
+
+    function generarControlesPaginacion(totalItems) {
+      const pagDiv = document.getElementById('paginacion');
+      pagDiv.innerHTML = "";
+      const totalPaginas = Math.ceil(totalItems / filasPorPagina);
+
+      for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.className = (i === paginaActual) ? "activo" : "";
+        btn.onclick = () => {
+          paginaActual = i;
+          mostrarProveedores(proveedoresFiltrados);
+        };
+        pagDiv.appendChild(btn);
+      }
+    }
+
+    function filtrarProveedor() {
+      const texto = document.getElementById('busqueda').value.toLowerCase();
+      proveedoresFiltrados = proveedores.filter(p =>
+        p.Nombre && p.Nombre.toLowerCase().includes(texto)
+      );
+      paginaActual = 1;
+      mostrarProveedores(proveedoresFiltrados);
+    }
+  </script>
+</body>
 </html>
