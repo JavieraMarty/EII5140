@@ -274,3 +274,39 @@ h1 {
   font-weight: bold;
 }
 
+#btnArriba {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  font-size: 24px;
+  background-color: #b5ff63;
+  color: black;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: none;
+}
+
+#btnArriba:hover {
+  background-color: #a4ee50;
+}
+
+#btnDescargar {
+  position: fixed;
+  bottom: 30px;
+  right: 90px;
+  z-index: 1000;
+  font-size: 16px;
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+
