@@ -42,49 +42,46 @@
     const filasPorPagina = 10;
 
     window.addEventListener("DOMContentLoaded", () => {
-      fetchExcelDesdeGitHub("https://github.com/JavieraMarty/EII5140/raw/ccd7216621dfd48af348edabe9efc4f2508ebcb6/data/proveedores.xlsx");
+      fetchExcelDesdeGitHub("https://github.com/JavieraMarty/EII5140/raw/0e916990023bb933c9699f7164330e387a7a29bb/data/proveedores.xlsx");
+    });
 
     function fetchExcelDesdeGitHub(url) {
       fetch(url)
-      .then(res => res.arrayBuffer())
-      .then(data => {
-        const workbook = XLSX.read(data, { type: 'array' });
-        const hoja = workbook.Sheets[workbook.SheetNames[0]];
-        const filas = XLSX.utils.sheet_to_json(hoja, { defval: "" }); // ← defval rellena celdas vacías
-    
-        proveedores = filas;
-        proveedoresFiltrados = [...proveedores];
-        paginaActual = 1;
-        mostrarProveedores(proveedoresFiltrados);
-      })
-      .catch(err => {
-        console.error("Error al cargar Excel:", err);
-        alert("No se pudo cargar el archivo desde GitHub.");
-      });
-
+        .then(res => res.arrayBuffer())
+        .then(data => {
+          const workbook = XLSX.read(data, { type: 'array' });
+          const hoja = workbook.Sheets[workbook.SheetNames[0]];
+          proveedores = XLSX.utils.sheet_to_json(hoja);
+          proveedoresFiltrados = [...proveedores];
+          paginaActual = 1;
+          mostrarProveedores(proveedoresFiltrados);
+        })
+        .catch(err => {
+          console.error("Error al cargar Excel:", err);
+          alert("No se pudo cargar el archivo desde GitHub.");
+        });
     }
 
     function mostrarProveedores(lista) {
       const tbody = document.getElementById('tabla-body');
       tbody.innerHTML = "";
-    
+
       const inicio = (paginaActual - 1) * filasPorPagina;
       const fin = inicio + filasPorPagina;
       const paginaDatos = lista.slice(inicio, fin);
-    
+
       paginaDatos.forEach(p => {
         const fila = `<tr>
-          <td>${p["Nombre"] || ""}</td>
-          <td>${p["Región"] || ""}</td>
-          <td>${p["Producto"] || ""}</td>
-          <td>${p["Contacto"] || ""}</td>
+          <td>${p.Nombre || ""}</td>
+          <td>${p.Región || ""}</td>
+          <td>${p.Producto || ""}</td>
+          <td>${p.Contacto || ""}</td>
         </tr>`;
         tbody.innerHTML += fila;
       });
-    
-      generarControlesPaginacion(lista.length);
-}
 
+      generarControlesPaginacion(lista.length);
+    }
 
     function generarControlesPaginacion(totalItems) {
       const pagDiv = document.getElementById('paginacion');
