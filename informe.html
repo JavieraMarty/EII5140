@@ -5,33 +5,55 @@
   <title>Informe general</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       background-color: #111;
       color: white;
       font-family: Arial, sans-serif;
       padding: 40px;
+      margin: 0;
+      overflow-y: auto;
     }
+
     h1 {
       font-size: 48px;
       margin-bottom: 30px;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
+
+    .contenedor {
+      display: flex;
       gap: 20px;
+      align-items: flex-start;
+      flex-wrap: wrap;
     }
+
+    .columnas {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 2;
+      min-width: 300px;
+    }
+
     .bloque-verde {
       background-color: #b5ff63;
       padding: 20px;
       border-radius: 10px;
       color: black;
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
     .bloque-verde img {
-      width: 100%;
+      max-width: 100%;
+      height: auto;
       border-radius: 6px;
-      margin-top: 10px;
     }
+
     .bloque-recomendaciones {
       background-color: #b5ff63;
       padding: 20px;
@@ -40,46 +62,49 @@
       white-space: pre-wrap;
       font-size: 16px;
       line-height: 1.6;
+      flex: 1;
+      min-width: 250px;
+    }
+
+    @media screen and (max-width: 900px) {
+      .contenedor {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
   <h1>Informe general</h1>
 
-  <div class="grid">
-    <div style="display: flex; flex-direction: column; gap: 20px;">
-      <!-- Proveedores -->
+  <div class="contenedor">
+    <!-- Gráficos a la izquierda -->
+    <div class="columnas">
       <div class="bloque-verde">
-        <strong>Proveedores</strong>
         <img src="https://raw.githubusercontent.com/JavieraMarty/EII5140/main/img/top10empresas.jpeg" alt="Top 10 empresas">
       </div>
 
-      <!-- Materias -->
       <div class="bloque-verde">
-        <strong>Materias</strong>
         <img src="https://raw.githubusercontent.com/JavieraMarty/EII5140/main/img/top10materias.jpeg" alt="Top 10 materias">
       </div>
 
-      <!-- Clustering -->
       <div class="bloque-verde">
-        <strong>Clustering</strong>
         <img src="https://raw.githubusercontent.com/JavieraMarty/EII5140/main/img/clustering.jpeg" alt="Clustering gráfico">
       </div>
     </div>
 
-    <!-- Recomendaciones -->
+    <!-- Recomendaciones a la derecha -->
     <div class="bloque-recomendaciones">
-<strong>Clúster 0 – Riesgo bajo y puntual</strong>
+<b>Clúster 0 – Riesgo bajo y puntual</b>
 Recomendación:
 * Mantener monitoreo estándar.
 * Considerar programas de formación o asistencia técnica para prevención de futuras alertas.
 
-<strong>Clúster 1 – Riesgo emergente con variedad alta</strong>
+<b>Clúster 1 – Riesgo emergente con variedad alta</b>
 Recomendación:
 * Monitoreo proactivo y priorización en planes de fiscalización.
 * Evaluar si el tipo de alerta sugiere problemas de origen sistémico (ej. procesos, calidad, proveedores).
 
-<strong>Clúster 2 – Riesgo sostenido</strong>
+<b>Clúster 2 – Riesgo sostenido</b>
 Recomendación:
 * Auditar con mayor frecuencia.
 * Considerar sanciones o restricciones si hay reincidencia sin mejora.
