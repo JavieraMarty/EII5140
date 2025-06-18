@@ -120,5 +120,38 @@
       </ul>
     </div>
   </div>
+  <!-- Botón Volver arriba -->
+<button id="btnArriba" title="Volver arriba">⬆</button>
+
+<!-- Botón Descargar PDF -->
+<button id="btnDescargar" title="Descargar informe">📄 Descargar PDF</button>
+
+<!-- Librería PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<!-- Script de funcionalidades -->
+<script>
+  // Botón volver arriba
+  const btnArriba = document.getElementById("btnArriba");
+  window.onscroll = function () {
+    btnArriba.style.display = (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) ? "block" : "none";
+  };
+  btnArriba.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // Botón descargar PDF
+  document.getElementById("btnDescargar").addEventListener("click", () => {
+    const element = document.body;
+    const opt = {
+      margin:       0.5,
+      filename:     'informe_general.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    html2pdf().from(element).set(opt).save();
+  });
+</script>
 </body>
 </html>
