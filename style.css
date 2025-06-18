@@ -9,12 +9,10 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #1e1e1e;
     color: #b5ff63;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    overflow: hidden;
 }
 
 .menu-superior {
